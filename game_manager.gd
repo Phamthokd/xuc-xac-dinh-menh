@@ -52,6 +52,7 @@ var websocket := WebSocketPeer.new()
 var websocket_url := "ws://127.0.0.1:8787"
 var socket_connected := false
 var suppress_state_emit := false
+var gameplay_visible := false
 
 @onready var board_layer: Node2D = $BoardLayer
 @onready var tiles_root: Node2D = $BoardLayer/Tiles
@@ -59,6 +60,7 @@ var suppress_state_emit := false
 @onready var p2_token: Sprite2D = $BoardLayer/P2_Token
 @onready var header: Panel = $UI/Header
 @onready var score_box: HBoxContainer = $UI/Header/ScoreBox
+@onready var menu_button: Button = $UI/Header/MenuButton
 @onready var score_p1: Label = $UI/Header/ScoreBox/P1_Info/ScoreP1
 @onready var items_p1: Label = $UI/Header/ScoreBox/P1_Info/ItemsP1
 @onready var score_p2: Label = $UI/Header/ScoreBox/P2_Info/ScoreP2
@@ -74,9 +76,10 @@ var suppress_state_emit := false
 @onready var event_desc: Label = $UI/EventPop/Desc
 @onready var close_pop: Button = $UI/EventPop/ClosePop
 @onready var lobby_panel: Panel = $UI/LobbyPanel
-@onready var room_code_input: LineEdit = $UI/LobbyPanel/LobbyMargin/LobbyBox/RoomCodeInput
-@onready var server_url_input: LineEdit = $UI/LobbyPanel/LobbyMargin/LobbyBox/ServerUrlInput
-@onready var lobby_status: Label = $UI/LobbyPanel/LobbyMargin/LobbyBox/LobbyStatus
+@onready var lobby_box: Panel = $UI/LobbyPanel/LobbyMargin/LobbyBox
+@onready var room_code_input: LineEdit = $UI/LobbyPanel/LobbyMargin/LobbyBox/LobbyContentMargin/LobbyRow/ModeCard/ModeMargin/ModeColumn/RoomCodeInput
+@onready var server_url_input: LineEdit = $UI/LobbyPanel/LobbyMargin/LobbyBox/LobbyContentMargin/LobbyRow/ModeCard/ModeMargin/ModeColumn/ServerUrlInput
+@onready var lobby_status: Label = $UI/LobbyPanel/LobbyMargin/LobbyBox/LobbyContentMargin/LobbyRow/ModeCard/ModeMargin/ModeColumn/LobbyStatus
 
 func _ready():
 	build_tile_nodes()
@@ -84,6 +87,7 @@ func _ready():
 	server_url_input.text = infer_default_websocket_url()
 	layout_scene()
 	refresh_all_ui()
+	show_start_menu()
 	get_viewport().size_changed.connect(_on_viewport_resized)
 	network_state_ready.connect(_send_state_to_socket)
 	network_action_requested.connect(_send_action_to_socket)
@@ -183,10 +187,17 @@ func layout_scene():
 
 	network_label.offset_top = header_height + 6.0
 	network_label.add_theme_font_size_override("font_size", 14 if compact else 16)
-	lobby_panel.offset_left = 16.0
-	lobby_panel.offset_top = header_height + 40.0
-	lobby_panel.offset_right = 296.0 if compact else 320.0
-	lobby_panel.offset_bottom = lobby_panel.offset_top + 196.0
+	menu_button.visible = gameplay_visible
+	menu_button.offset_left = -110.0
+	menu_button.offset_right = -18.0
+	menu_button.offset_top = 16.0
+	menu_button.offset_bottom = 54.0
+	lobby_panel.self_modulate = Color(1, 1, 1, 0.97)
+	lobby_panel.modulate = Color(1, 1, 1, 1)
+	lobby_box.offset_left = -340.0 if compact else -420.0
+	lobby_box.offset_right = 340.0 if compact else 420.0
+	lobby_box.offset_top = -220.0 if compact else -200.0
+	lobby_box.offset_bottom = 220.0 if compact else 200.0
 
 	var popup_width = minf(viewport_size.x - 40.0, 520.0 if compact else 620.0)
 	var popup_height = minf(viewport_size.y * 0.42, 300.0 if compact else 340.0)
@@ -315,6 +326,27 @@ func refresh_all_ui():
 	update_lobby_status()
 	place_tokens()
 
+func set_gameplay_visible(visible: bool):
+	gameplay_visible = visible
+	board_layer.visible = visible
+	header.visible = visible
+	controls.visible = visible
+	status_label.visible = visible
+	network_label.visible = visible
+	if not visible:
+		event_pop.hide()
+	menu_button.visible = visible
+
+func show_start_menu():
+	set_gameplay_visible(false)
+	lobby_panel.show()
+	lobby_status.text = "Chon che do choi de bat dau."
+
+func enter_match():
+	lobby_panel.hide()
+	set_gameplay_visible(true)
+	refresh_all_ui()
+
 func update_ui():
 	score_p1.text = "%s (%s): %d" % [PLAYER_LABELS[0], PLAYER_TITLES[0], player_scores[0]]
 	score_p2.text = "%s (%s): %d" % [PLAYER_LABELS[1], PLAYER_TITLES[1], player_scores[1]]
@@ -396,6 +428,7 @@ func generate_room_code() -> String:
 func _on_offline_button_pressed():
 	disconnect_socket()
 	set_offline_mode()
+	enter_match()
 
 func _on_host_button_pressed():
 	var code = room_code_input.text.strip_edges().to_upper()
@@ -410,6 +443,7 @@ func _on_host_button_pressed():
 		"player_index": 0,
 		"state": build_match_state(),
 	})
+	enter_match()
 
 func _on_join_button_pressed():
 	var code = room_code_input.text.strip_edges().to_upper()
@@ -423,6 +457,10 @@ func _on_join_button_pressed():
 		"room_code": code,
 		"player_index": 1,
 	})
+	enter_match()
+
+func _on_menu_button_pressed():
+	show_start_menu()
 
 func emit_current_state():
 	if suppress_state_emit:

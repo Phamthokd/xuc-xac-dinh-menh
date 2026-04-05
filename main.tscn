@@ -40,11 +40,39 @@ z_index = 5
 [node name="UI" type="CanvasLayer" parent="."]
 
 [node name="LobbyPanel" type="Panel" parent="UI"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+self_modulate = Color(1, 1, 1, 0.96)
+
+[node name="LobbyShade" type="ColorRect" parent="UI/LobbyPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.04, 0.05, 0.09, 0.76)
+
+[node name="GlowLeft" type="ColorRect" parent="UI/LobbyPanel"]
+layout_mode = 1
 anchors_preset = 0
-offset_left = 16.0
-offset_top = 16.0
-offset_right = 296.0
-offset_bottom = 212.0
+offset_left = -120.0
+offset_top = -60.0
+offset_right = 340.0
+offset_bottom = 420.0
+color = Color(0.16, 0.44, 0.93, 0.18)
+
+[node name="GlowRight" type="ColorRect" parent="UI/LobbyPanel"]
+layout_mode = 1
+anchors_preset = 0
+offset_left = 920.0
+offset_top = 340.0
+offset_right = 1420.0
+offset_bottom = 840.0
+color = Color(0.94, 0.55, 0.13, 0.15)
 
 [node name="LobbyMargin" type="MarginContainer" parent="UI/LobbyPanel"]
 layout_mode = 1
@@ -53,59 +81,150 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = 12
-theme_override_constants/margin_top = 12
-theme_override_constants/margin_right = 12
-theme_override_constants/margin_bottom = 12
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 24
 
-[node name="LobbyBox" type="VBoxContainer" parent="UI/LobbyPanel/LobbyMargin"]
+[node name="LobbyBox" type="Panel" parent="UI/LobbyPanel/LobbyMargin"]
+layout_mode = 2
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -420.0
+offset_top = -200.0
+offset_right = 420.0
+offset_bottom = 200.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="LobbyContentMargin" type="MarginContainer" parent="UI/LobbyPanel/LobbyMargin/LobbyBox"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 22
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 22
+
+[node name="LobbyRow" type="HBoxContainer" parent="UI/LobbyPanel/LobbyMargin/LobbyBox/LobbyContentMargin"]
+layout_mode = 2
+theme_override_constants/separation = 28
+
+[node name="HeroColumn" type="VBoxContainer" parent="UI/LobbyPanel/LobbyMargin/LobbyBox/LobbyContentMargin/LobbyRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 12
+
+[node name="HeroBadge" type="Label" parent="UI/LobbyPanel/LobbyMargin/LobbyBox/LobbyContentMargin/LobbyRow/HeroColumn"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.98, 0.79, 0.24, 1)
+theme_override_font_sizes/font_size = 16
+text = "BOARD GAME FANTASY"
+
+[node name="LobbyTitle" type="Label" parent="UI/LobbyPanel/LobbyMargin/LobbyBox/LobbyContentMargin/LobbyRow/HeroColumn"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 42
+text = "Xuc Xac\nDinh Menh"
+
+[node name="LobbyHint" type="Label" parent="UI/LobbyPanel/LobbyMargin/LobbyBox/LobbyContentMargin/LobbyRow/HeroColumn"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.86, 0.87, 0.9, 1)
+theme_override_font_sizes/font_size = 17
+text = "Tung xuc xac, gap o bat ngo va tranh diem voi doi thu. Chon che do de vao van ngay."
+autowrap_mode = 3
+
+[node name="FeatureList" type="VBoxContainer" parent="UI/LobbyPanel/LobbyMargin/LobbyBox/LobbyContentMargin/LobbyRow/HeroColumn"]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="LobbyTitle" type="Label" parent="UI/LobbyPanel/LobbyMargin/LobbyBox"]
+[node name="Feature1" type="Label" parent="UI/LobbyPanel/LobbyMargin/LobbyBox/LobbyContentMargin/LobbyRow/HeroColumn/FeatureList"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 20
-text = "Phong Online"
+theme_override_colors/font_color = Color(0.74, 0.83, 0.95, 1)
+theme_override_font_sizes/font_size = 15
+text = "• 2 nguoi, luot nhanh, de choi tren mobile"
 
-[node name="LobbyHint" type="Label" parent="UI/LobbyPanel/LobbyMargin/LobbyBox"]
+[node name="Feature2" type="Label" parent="UI/LobbyPanel/LobbyMargin/LobbyBox/LobbyContentMargin/LobbyRow/HeroColumn/FeatureList"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.82, 0.82, 0.82, 1)
-theme_override_font_sizes/font_size = 13
-text = "Tao phong hoac nhap ma phong de join."
+theme_override_colors/font_color = Color(0.74, 0.83, 0.95, 1)
+theme_override_font_sizes/font_size = 15
+text = "• Choi offline cung may hoac tao phong online"
+
+[node name="Feature3" type="Label" parent="UI/LobbyPanel/LobbyMargin/LobbyBox/LobbyContentMargin/LobbyRow/HeroColumn/FeatureList"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.74, 0.83, 0.95, 1)
+theme_override_font_sizes/font_size = 15
+text = "• Web + WSS san sang cho iPhone"
+
+[node name="ModeCard" type="Panel" parent="UI/LobbyPanel/LobbyMargin/LobbyBox/LobbyContentMargin/LobbyRow"]
+custom_minimum_size = Vector2(320, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ModeMargin" type="MarginContainer" parent="UI/LobbyPanel/LobbyMargin/LobbyBox/LobbyContentMargin/LobbyRow/ModeCard"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 18
+theme_override_constants/margin_top = 18
+theme_override_constants/margin_right = 18
+theme_override_constants/margin_bottom = 18
+
+[node name="ModeColumn" type="VBoxContainer" parent="UI/LobbyPanel/LobbyMargin/LobbyBox/LobbyContentMargin/LobbyRow/ModeCard/ModeMargin"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="ModeTitle" type="Label" parent="UI/LobbyPanel/LobbyMargin/LobbyBox/LobbyContentMargin/LobbyRow/ModeCard/ModeMargin/ModeColumn"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Chon che do"
+
+[node name="ModeHint" type="Label" parent="UI/LobbyPanel/LobbyMargin/LobbyBox/LobbyContentMargin/LobbyRow/ModeCard/ModeMargin/ModeColumn"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8, 0.82, 0.87, 1)
+theme_override_font_sizes/font_size = 14
+text = "Offline vao van ngay. Online dung ma phong de host hoac tham gia."
 autowrap_mode = 3
 
-[node name="RoomCodeInput" type="LineEdit" parent="UI/LobbyPanel/LobbyMargin/LobbyBox"]
+[node name="RoomCodeInput" type="LineEdit" parent="UI/LobbyPanel/LobbyMargin/LobbyBox/LobbyContentMargin/LobbyRow/ModeCard/ModeMargin/ModeColumn"]
+custom_minimum_size = Vector2(0, 46)
 layout_mode = 2
 placeholder_text = "Nhap ma phong, vd: ROOM123"
 
-[node name="ServerUrlInput" type="LineEdit" parent="UI/LobbyPanel/LobbyMargin/LobbyBox"]
+[node name="ServerUrlInput" type="LineEdit" parent="UI/LobbyPanel/LobbyMargin/LobbyBox/LobbyContentMargin/LobbyRow/ModeCard/ModeMargin/ModeColumn"]
+custom_minimum_size = Vector2(0, 46)
 layout_mode = 2
 text = "ws://127.0.0.1:8787"
 placeholder_text = "WebSocket URL"
 
-[node name="LobbyButtons" type="HBoxContainer" parent="UI/LobbyPanel/LobbyMargin/LobbyBox"]
+[node name="LobbyButtons" type="VBoxContainer" parent="UI/LobbyPanel/LobbyMargin/LobbyBox/LobbyContentMargin/LobbyRow/ModeCard/ModeMargin/ModeColumn"]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="OfflineButton" type="Button" parent="UI/LobbyPanel/LobbyMargin/LobbyBox/LobbyButtons"]
-custom_minimum_size = Vector2(76, 38)
+[node name="OfflineButton" type="Button" parent="UI/LobbyPanel/LobbyMargin/LobbyBox/LobbyContentMargin/LobbyRow/ModeCard/ModeMargin/ModeColumn/LobbyButtons"]
+custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
-size_flags_horizontal = 3
-text = "Offline"
+text = "Choi Offline"
 
-[node name="HostButton" type="Button" parent="UI/LobbyPanel/LobbyMargin/LobbyBox/LobbyButtons"]
-custom_minimum_size = Vector2(76, 38)
+[node name="HostButton" type="Button" parent="UI/LobbyPanel/LobbyMargin/LobbyBox/LobbyContentMargin/LobbyRow/ModeCard/ModeMargin/ModeColumn/LobbyButtons"]
+custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
-size_flags_horizontal = 3
-text = "Tao phong"
+text = "Tao phong Online"
 
-[node name="JoinButton" type="Button" parent="UI/LobbyPanel/LobbyMargin/LobbyBox/LobbyButtons"]
-custom_minimum_size = Vector2(76, 38)
+[node name="JoinButton" type="Button" parent="UI/LobbyPanel/LobbyMargin/LobbyBox/LobbyContentMargin/LobbyRow/ModeCard/ModeMargin/ModeColumn/LobbyButtons"]
+custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
-size_flags_horizontal = 3
-text = "Tham gia"
+text = "Tham gia phong"
 
-[node name="LobbyStatus" type="Label" parent="UI/LobbyPanel/LobbyMargin/LobbyBox"]
+[node name="LobbyStatus" type="Label" parent="UI/LobbyPanel/LobbyMargin/LobbyBox/LobbyContentMargin/LobbyRow/ModeCard/ModeMargin/ModeColumn"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.75, 0.82, 0.93, 1)
 theme_override_font_sizes/font_size = 13
@@ -118,6 +237,18 @@ anchor_right = 1.0
 offset_bottom = 96.0
 grow_horizontal = 2
 self_modulate = Color(1, 1, 1, 0.9)
+
+[node name="MenuButton" type="Button" parent="UI/Header"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -116.0
+offset_top = 18.0
+offset_right = -20.0
+offset_bottom = 58.0
+grow_horizontal = 0
+text = "Menu"
 
 [node name="ScoreBox" type="HBoxContainer" parent="UI/Header"]
 layout_mode = 1
@@ -291,6 +422,7 @@ text = "Đóng"
 
 [connection signal="pressed" from="UI/Controls/RollButton" to="." method="_on_roll_button_pressed"]
 [connection signal="pressed" from="UI/EventPop/ClosePop" to="." method="_on_close_pop_pressed"]
-[connection signal="pressed" from="UI/LobbyPanel/LobbyMargin/LobbyBox/LobbyButtons/OfflineButton" to="." method="_on_offline_button_pressed"]
-[connection signal="pressed" from="UI/LobbyPanel/LobbyMargin/LobbyBox/LobbyButtons/HostButton" to="." method="_on_host_button_pressed"]
-[connection signal="pressed" from="UI/LobbyPanel/LobbyMargin/LobbyBox/LobbyButtons/JoinButton" to="." method="_on_join_button_pressed"]
+[connection signal="pressed" from="UI/LobbyPanel/LobbyMargin/LobbyBox/LobbyContentMargin/LobbyRow/ModeCard/ModeMargin/ModeColumn/LobbyButtons/OfflineButton" to="." method="_on_offline_button_pressed"]
+[connection signal="pressed" from="UI/LobbyPanel/LobbyMargin/LobbyBox/LobbyContentMargin/LobbyRow/ModeCard/ModeMargin/ModeColumn/LobbyButtons/HostButton" to="." method="_on_host_button_pressed"]
+[connection signal="pressed" from="UI/LobbyPanel/LobbyMargin/LobbyBox/LobbyContentMargin/LobbyRow/ModeCard/ModeMargin/ModeColumn/LobbyButtons/JoinButton" to="." method="_on_join_button_pressed"]
+[connection signal="pressed" from="UI/Header/MenuButton" to="." method="_on_menu_button_pressed"]
