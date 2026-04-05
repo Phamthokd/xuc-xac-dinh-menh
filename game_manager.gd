@@ -652,6 +652,9 @@ func _handle_socket_message(text: String):
 				suppress_state_emit = true
 				apply_match_state(parsed["state"])
 				suppress_state_emit = false
+		"peer_joined":
+			if network_mode == NetworkMode.HOST:
+				emit_current_state()
 		"action_request":
 			if network_mode == NetworkMode.HOST:
 				_handle_remote_action_request(parsed)

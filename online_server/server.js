@@ -2,7 +2,7 @@ import http from "node:http";
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { WebSocketServer } from "ws";
+import WebSocket, { WebSocketServer } from "ws";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -57,14 +57,14 @@ const server = http.createServer((req, res) => {
 const wss = new WebSocketServer({ server, path: "/ws" });
 
 function send(ws, payload) {
-  if (ws.readyState === ws.OPEN) {
+  if (ws.readyState === WebSocket.OPEN) {
     ws.send(JSON.stringify(payload));
   }
 }
 
 function broadcast(room, payload, except = null) {
   for (const client of room.clients) {
-    if (client !== except && client.readyState === client.OPEN) {
+    if (client !== except && client.readyState === WebSocket.OPEN) {
       client.send(JSON.stringify(payload));
     }
   }
@@ -90,10 +90,16 @@ function cleanupRoom(code) {
   }
 }
 
+function logRoomEvent(roomCode, message) {
+  console.log(`[room:${roomCode || "-"}] ${message}`);
+}
+
 wss.on("connection", (ws) => {
   ws.roomCode = "";
   ws.playerIndex = -1;
   ws.isHost = false;
+
+  logRoomEvent("", "socket connected");
 
   ws.on("message", (raw) => {
     let message;
@@ -124,6 +130,7 @@ wss.on("connection", (ws) => {
       ws.roomCode = roomCode;
       ws.playerIndex = 0;
       ws.isHost = true;
+      logRoomEvent(roomCode, "host registered");
       send(ws, { type: "room_hosted", room_code: roomCode, state: room.state });
       return;
     }
@@ -140,6 +147,7 @@ wss.on("connection", (ws) => {
       ws.playerIndex = Number(message.player_index ?? 1);
       ws.isHost = false;
       room.clients.add(ws);
+      logRoomEvent(roomCode, `client joined as player ${ws.playerIndex}`);
       send(ws, { type: "room_joined", room_code: roomCode, state: room.state });
       broadcast(room, { type: "peer_joined", room_code: roomCode, player_index: ws.playerIndex }, ws);
       return;
@@ -163,6 +171,7 @@ wss.on("connection", (ws) => {
       }
 
       room.state = message.state || room.state;
+      logRoomEvent(ws.roomCode, "state update broadcast");
       broadcast(room, { type: "state_update", room_code: ws.roomCode, state: room.state }, ws);
       return;
     }
@@ -173,6 +182,7 @@ wss.on("connection", (ws) => {
         return;
       }
 
+      logRoomEvent(ws.roomCode, `roll request from player ${Number(message.player ?? ws.playerIndex)}`);
       send(room.host, {
         type: "action_request",
         action: "roll_request",
@@ -188,6 +198,7 @@ wss.on("connection", (ws) => {
   });
 
   ws.on("close", () => {
+    logRoomEvent(ws.roomCode, ws.isHost ? "host disconnected" : `client ${ws.playerIndex} disconnected`);
     if (!ws.roomCode) return;
     const room = rooms.get(ws.roomCode);
     if (!room) return;
