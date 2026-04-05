@@ -594,10 +594,10 @@ func poll_socket():
 				"player_index": local_player_index,
 			})
 
-		while websocket.get_available_packet_count() > 0:
-			var packet = websocket.get_packet()
-			var text = packet.get_string_from_utf8()
-			_handle_socket_message(text)
+	while state == WebSocketPeer.STATE_OPEN and websocket.get_available_packet_count() > 0:
+		var packet = websocket.get_packet()
+		var text = packet.get_string_from_utf8()
+		_handle_socket_message(text)
 
 func send_socket_message(payload: Dictionary):
 	if websocket.get_ready_state() != WebSocketPeer.STATE_OPEN:
@@ -715,7 +715,7 @@ func get_token_offset_pos(tile_index: int, player_index: int) -> Vector2:
 func _on_roll_button_pressed():
 	if is_moving:
 		return
-	if network_mode == NetworkMode.CLIENT and current_player != local_player_index:
+	if network_mode == NetworkMode.CLIENT:
 		request_remote_roll()
 		return
 	await _perform_authoritative_roll()
