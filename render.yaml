@@ -1,0 +1,11 @@
+services:
+  - name: xuc-xac-dinh-menh
+    type: web
+    runtime: node
+    plan: free
+    region: singapore
+    rootDir: online_server
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /healthz
+    autoDeployTrigger: commit

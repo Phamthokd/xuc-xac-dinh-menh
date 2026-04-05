@@ -1,0 +1,296 @@
+[gd_scene load_steps=3 format=3 uid="uid://df7w1r7f5p2q"]
+
+[ext_resource type="Script" path="res://game_manager.gd" id="1_gd"]
+[ext_resource type="Texture2D" path="res://player1_blue_cutout.png" id="4_p1"]
+[ext_resource type="Texture2D" path="res://player2_red_cutout.png" id="5_p2"]
+
+[node name="Main" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_gd")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.12, 0.15, 0.2, 1)
+
+[node name="BoardLayer" type="Node2D" parent="."]
+position = Vector2(640, 360)
+
+[node name="Tiles" type="Node2D" parent="BoardLayer"]
+
+[node name="P1_Token" type="Sprite2D" parent="BoardLayer"]
+scale = Vector2(0.08, 0.08)
+texture = ExtResource("4_p1")
+z_index = 5
+
+[node name="P2_Token" type="Sprite2D" parent="BoardLayer"]
+scale = Vector2(0.08, 0.08)
+texture = ExtResource("5_p2")
+z_index = 5
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="LobbyPanel" type="Panel" parent="UI"]
+anchors_preset = 0
+offset_left = 16.0
+offset_top = 16.0
+offset_right = 296.0
+offset_bottom = 212.0
+
+[node name="LobbyMargin" type="MarginContainer" parent="UI/LobbyPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="LobbyBox" type="VBoxContainer" parent="UI/LobbyPanel/LobbyMargin"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="LobbyTitle" type="Label" parent="UI/LobbyPanel/LobbyMargin/LobbyBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Phong Online"
+
+[node name="LobbyHint" type="Label" parent="UI/LobbyPanel/LobbyMargin/LobbyBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.82, 0.82, 0.82, 1)
+theme_override_font_sizes/font_size = 13
+text = "Tao phong hoac nhap ma phong de join."
+autowrap_mode = 3
+
+[node name="RoomCodeInput" type="LineEdit" parent="UI/LobbyPanel/LobbyMargin/LobbyBox"]
+layout_mode = 2
+placeholder_text = "Nhap ma phong, vd: ROOM123"
+
+[node name="ServerUrlInput" type="LineEdit" parent="UI/LobbyPanel/LobbyMargin/LobbyBox"]
+layout_mode = 2
+text = "ws://127.0.0.1:8787"
+placeholder_text = "WebSocket URL"
+
+[node name="LobbyButtons" type="HBoxContainer" parent="UI/LobbyPanel/LobbyMargin/LobbyBox"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="OfflineButton" type="Button" parent="UI/LobbyPanel/LobbyMargin/LobbyBox/LobbyButtons"]
+custom_minimum_size = Vector2(76, 38)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Offline"
+
+[node name="HostButton" type="Button" parent="UI/LobbyPanel/LobbyMargin/LobbyBox/LobbyButtons"]
+custom_minimum_size = Vector2(76, 38)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Tao phong"
+
+[node name="JoinButton" type="Button" parent="UI/LobbyPanel/LobbyMargin/LobbyBox/LobbyButtons"]
+custom_minimum_size = Vector2(76, 38)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Tham gia"
+
+[node name="LobbyStatus" type="Label" parent="UI/LobbyPanel/LobbyMargin/LobbyBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.75, 0.82, 0.93, 1)
+theme_override_font_sizes/font_size = 13
+text = "Dang o che do offline."
+autowrap_mode = 3
+
+[node name="Header" type="Panel" parent="UI"]
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 96.0
+grow_horizontal = 2
+self_modulate = Color(1, 1, 1, 0.9)
+
+[node name="ScoreBox" type="HBoxContainer" parent="UI/Header"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = 8.0
+offset_right = -20.0
+offset_bottom = -8.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+theme_override_constants/separation = 28
+
+[node name="P1_Info" type="VBoxContainer" parent="UI/Header/ScoreBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="ScoreP1" type="Label" parent="UI/Header/ScoreBox/P1_Info"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Người chơi 1 (Hiệp sĩ Xanh): 0"
+horizontal_alignment = 1
+
+[node name="ItemsP1" type="Label" parent="UI/Header/ScoreBox/P1_Info"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.82, 0.82, 0.82, 1)
+theme_override_font_sizes/font_size = 15
+text = "Vật phẩm: []"
+horizontal_alignment = 1
+
+[node name="TurnLabel" type="Label" parent="UI/Header/ScoreBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.8, 0, 1)
+theme_override_font_sizes/font_size = 36
+text = "Lượt 1/20"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="P2_Info" type="VBoxContainer" parent="UI/Header/ScoreBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="ScoreP2" type="Label" parent="UI/Header/ScoreBox/P2_Info"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Người chơi 2 (Cung thủ Đỏ): 0"
+horizontal_alignment = 1
+
+[node name="ItemsP2" type="Label" parent="UI/Header/ScoreBox/P2_Info"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.82, 0.82, 0.82, 1)
+theme_override_font_sizes/font_size = 15
+text = "Vật phẩm: []"
+horizontal_alignment = 1
+
+[node name="Controls" type="VBoxContainer" parent="UI"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -130.0
+offset_top = -10.0
+offset_right = 130.0
+offset_bottom = 132.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+theme_override_constants/separation = 10
+
+[node name="DiceValue" type="Label" parent="UI/Controls"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.96)
+theme_override_font_sizes/font_size = 64
+text = "1"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="RollButton" type="Button" parent="UI/Controls"]
+custom_minimum_size = Vector2(260, 76)
+layout_mode = 2
+theme_override_font_sizes/font_size = 26
+text = "TUNG XÚC XẮC"
+
+[node name="StatusLabel" type="Label" parent="UI"]
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -52.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_font_sizes/font_size = 22
+text = "Lượt của Người chơi 1"
+horizontal_alignment = 1
+
+[node name="NetworkLabel" type="Label" parent="UI"]
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 104.0
+offset_bottom = 126.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0.75, 0.82, 0.93, 1)
+theme_override_font_sizes/font_size = 16
+text = "Mode: Offline | Local: Nguoi choi 1"
+horizontal_alignment = 1
+
+[node name="EventPop" type="Panel" parent="UI"]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -310.0
+offset_top = -170.0
+offset_right = 310.0
+offset_bottom = 170.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Title" type="Label" parent="UI/EventPop"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 12.0
+offset_bottom = 64.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 30
+text = "SỰ KIỆN"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Desc" type="Label" parent="UI/EventPop"]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = 24.0
+offset_top = -50.0
+offset_right = -24.0
+offset_bottom = 50.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 20
+text = "Nội dung sự kiện..."
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="ClosePop" type="Button" parent="UI/EventPop"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -70.0
+offset_top = -64.0
+offset_right = 70.0
+offset_bottom = -16.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "Đóng"
+
+[connection signal="pressed" from="UI/Controls/RollButton" to="." method="_on_roll_button_pressed"]
+[connection signal="pressed" from="UI/EventPop/ClosePop" to="." method="_on_close_pop_pressed"]
+[connection signal="pressed" from="UI/LobbyPanel/LobbyMargin/LobbyBox/LobbyButtons/OfflineButton" to="." method="_on_offline_button_pressed"]
+[connection signal="pressed" from="UI/LobbyPanel/LobbyMargin/LobbyBox/LobbyButtons/HostButton" to="." method="_on_host_button_pressed"]
+[connection signal="pressed" from="UI/LobbyPanel/LobbyMargin/LobbyBox/LobbyButtons/JoinButton" to="." method="_on_join_button_pressed"]
