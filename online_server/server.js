@@ -46,7 +46,9 @@ const server = http.createServer((req, res) => {
     const ext = path.extname(filePath).toLowerCase();
     res.writeHead(200, {
       "content-type": MIME_TYPES[ext] || "application/octet-stream",
-      "cache-control": ext === ".html" ? "no-cache" : "public, max-age=3600",
+      "cache-control": "no-store, no-cache, must-revalidate",
+      pragma: "no-cache",
+      expires: "0",
     });
     res.end(data);
   });
